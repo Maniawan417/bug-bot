@@ -1,0 +1,28 @@
+name: Bug Bounty Alert
+
+on:
+  schedule:
+    - cron: '0 * * * *'  # Har ghante chalega
+  workflow_dispatch:      # Manual button
+
+jobs:
+  run-check:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+      - run: pip install requests
+      - name: Run Bot
+        env:
+          DISCORD_WEBHOOK_URL: ${{ secrets.https://discord.com/api/webhooks/1451595255844438046/rfqcXeIZkwKQEiK-ms2swFOgcatK9OziXLqpWDL_Z1jHyQnG61KmOOj7eS5HLV0nXiVY }}
+        run: python main.py
+      - name: Save Data
+        run: |
+          git config --global user.name "Bot"
+          git config --global user.email "bot@github.com"
+          git add known_programs.json || true
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update" && git push)
